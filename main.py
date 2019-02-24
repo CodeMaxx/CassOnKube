@@ -17,13 +17,23 @@ def buildArgParser():
     parser = argparse.ArgumentParser(description='Cassandra On Kube ver ' + VERSION)
     return parser
 
-def main():
-    parser = buildArgParser()
+def run_command(command):
     try:
-        subprocess.check_output("./install_docker.sh", shell=True)
+        subprocess.check_output(command, shell=True)
     except subprocess.CalledProcessError as e:
         print(colored("Aborting...", "red"))
         sys.exit()
+
+def main():
+    # Reading arguments
+    parser = buildArgParser()
+
+    # Install Docker
+    run_command("./install_docker.sh")
+
+    # Install Kubernetes
+    run_command("./install_kubernetes.sh")
+
 
 if __name__ == '__main__':
     main()
