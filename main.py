@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 #####
 ### Author: Akash Trehan
 ### Email: akash.trehan123@gmail.com

@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 #####
 ### Author: Akash Trehan
 ### Email: akash.trehan123@gmail.com
