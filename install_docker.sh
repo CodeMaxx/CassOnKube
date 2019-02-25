@@ -22,7 +22,7 @@ else
     echo "${BLUE}Installing Pre-requisites...${NC}" && \
     apt install -v apt-transport-https ca-certificates curl software-properties-common && \
     echo "${BLUE}Adding Docker repository...${NC}" && \
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
     apt update && \
     echo "${BLUE}Beginning docker Installation...${NC}"

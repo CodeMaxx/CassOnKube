@@ -8,6 +8,5 @@
 
 ### Tested on Ubuntu 18.04
 
-add-apt-repository multiverse && \
-apt-get update && \
-apt install -y virtualbox
+systemctl restart docker
+minikube start

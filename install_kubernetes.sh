@@ -18,16 +18,18 @@ if [ -x "$(command -v kubectl)" ]; then
 else
     echo "${GREEN}Installing Kubernetes (kubectl)...${NC}"
     echo "${BLUE}Updating Packages...${NC}"
-    apt-get update && \
+    apt update && \
     echo "${BLUE}Installing Pre-requisites...${NC}" && \
-    apt-get install -y apt-transport-https && \
+    apt install -y apt-transport-https && \
     echo "${BLUE}Adding Docker repository...${NC}" && \
-    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
-    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list && \
-    apt-get update && \
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
+    apt update && \
     echo "${BLUE}Beginning kubectl Installation...${NC}" && \
-    sudo apt-get install -y kubectl
+    apt install -y kubectl
     if [ -x "$(command -v kubectl)" ]; then
+        echo "source <(kubectl completion bash)" >> ~/.bashrc
+        source <(kubectl completion bash)
         echo "${GREEN}Kubernetes Installed!${NC}"
         exit 0
     else

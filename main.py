@@ -6,6 +6,8 @@
 ### Web: https://www.akashtrehan.com/
 #####
 
+### Tested on Ubuntu 18.04
+
 import argparse
 import subprocess
 import sys
@@ -33,6 +35,15 @@ def main():
 
     # Install Kubernetes
     run_command("./install_kubernetes.sh")
+
+    # Install a hypervisor
+    run_command("./install_hypervisor.sh")
+
+    # Install minikube
+    run_command("./install_minikube.sh")
+
+    # Run minikube
+    run_command("./basic_setup.sh")
 
 
 if __name__ == '__main__':
