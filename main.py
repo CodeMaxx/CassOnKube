@@ -31,27 +31,27 @@ def setup_cassandra(num):
     vols = ""
 
     for i in range(num):
-        vols += "---\
-        apiVersion: v1\
-        kind: PersistentVolume\
-        metadata:\
-          name: cassandra-data-%d\
-          labels:\
-            type: local\
-            app: cassandra\
-        spec:\
-          capacity:\
-            storage: 1Gi\
-          accessModes:\
-            - ReadWriteOnce\
-          hostPath:\
-            path: /tmp/data/cassandra-data-%d\
-          persistentVolumeReclaimPolicy: Recycle\n" % (i+1, i+1)
+        vols += "---\n\
+        apiVersion: v1\n\
+        kind: PersistentVolume\n\
+        metadata:\n\
+          name: cassandra-data-%d\n\
+          labels:\n\
+            type: local\n\
+            app: cassandra\n\
+        spec:\n\
+          capacity:\n\
+            storage: 1Gi\n\
+          accessModes:\n\
+            - ReadWriteOnce\n\
+          hostPath:\n\
+            path: /tmp/data/cassandra-data-%d\n\
+          persistentVolumeReclaimPolicy: Recycle\n" % (i, i)
 
     with open('cassandra/local-volumes.yaml', 'w') as f:
         f.write(vols)
 
-    run_command("scripts/setup_cassandra.sh %d", num)
+    run_command("scripts/setup_cassandra.sh %d" % num)
 
 def main():
     # Reading arguments
@@ -64,19 +64,19 @@ def main():
     # Install Kubernetes
     run_command("scripts/install_kubernetes.sh")
 
-    # Install a hypervisor
-    if args.v == 'virtualbox':
-        run_command("scripts/install_virtualbox.sh")
-    elif args.v == 'kvm':
-        run_command("scripts/install_kvm.sh")
-
     # Install minikube
     run_command("scripts/install_minikube.sh")
+
+    # Install a hypervisor
+    if args.visor == 'virtualbox':
+        run_command("scripts/install_virtualbox.sh")
+    elif args.visor == 'kvm':
+        run_command("scripts/install_kvm.sh")
 
     # Run minikube
     run_command("scripts/base_setup.sh")
 
-    setup_cassandra(args.s)
+    setup_cassandra(args.server)
 
 
 if __name__ == '__main__':

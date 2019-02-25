@@ -13,7 +13,7 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-virsh list --all
+dpkg -s qemu qemu-kvm libvirt-bin virt-manager
 
 if [ $? -eq 0 ]; then
     echo -e "KVM already installed!"
@@ -22,14 +22,14 @@ else
     echo -e "${BLUE}Pre-installation checks in progress...${NC}"
     val=$(egrep -c '(vmx|svm)' /proc/cpuinfo)
     if [ $val -gt 0 ]; then
-        apt install cpu-checker
+        apt install -y cpu-checker
         kvm-ok
         if [ $? -eq 0 ]; then
             echo -e "${BLUE}All checks passed. Beginning KVM installation...${NC}"
             apt update && \
-            apt install qemu qemu-kvm libvirt-bin virt-manager
-            apt install bridge-utils
-            virsh list --all
+            apt install -y qemu qemu-kvm libvirt-bin virt-manager
+            apt install -y bridge-utils
+            dpkg -s qemu qemu-kvm libvirt-bin virt-manager
             if [ $? -eq 0 ]; then
                 echo -e "${GREEN}KVM Installed!${NC}"
             else
@@ -47,13 +47,13 @@ else
 fi
 
 
-echo -e "${RED}Installing KVM2 driver for minkube...${NC}"
-apt install libvirt-clients libvirt-daemon-system && \
-usermod -a -G libvirt $(whoami) && \
-newgrp libvirt && \
-curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 && \
+echo -e "${GREEN}Installing KVM2 driver for minkube...${NC}"
+apt install -y libvirt-clients libvirt-daemon-system && \
+wget -c https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 && \
 install docker-machine-driver-kvm2 /usr/local/bin/ && \
+usermod -a -G libvirt $(whoami) && \
+# newgrp libvirt && \
 
-echo -e "${RED}Seting KVM as default hypervisor for minikube${NC}"
+echo -e "${GREEN}Seting KVM as default hypervisor for minikube${NC}"
 minikube config set vm-driver kvm2
 exit 0
