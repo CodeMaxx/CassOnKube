@@ -26,8 +26,9 @@ else
     echo -e "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
     apt update && \
     echo -e "${BLUE}Beginning kubectl Installation...${NC}" && \
-    apt install -y kubectl
+    apt install -y kubectl kubeadm kubelet
     if [ -x "$(command -v kubectl)" ]; then
+        apt install -y conntrack
         echo -e "source <(kubectl completion bash)" >> ~/.bashrc
         source <(kubectl completion bash)
         echo -e "${GREEN}Kubernetes Installed!${NC}"

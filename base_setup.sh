@@ -9,5 +9,5 @@
 ### Tested on Ubuntu 18.04
 
 systemctl restart docker && \
-minikube start
+minikube start --memory 5120 --cpus=4
 exit 0
