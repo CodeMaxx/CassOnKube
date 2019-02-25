@@ -16,43 +16,44 @@ NC='\033[0m'
 virsh list --all
 
 if [ $? -eq 0 ]; then
-    echo "KVM already installed!"
+    echo -e "KVM already installed!"
 else
-    echo "${GREEN}Installing KVM...${NC}"
-    echo "${BLUE}Pre-installation checks in progress...${NC}"
+    echo -e "${GREEN}Installing KVM...${NC}"
+    echo -e "${BLUE}Pre-installation checks in progress...${NC}"
     val=$(egrep -c '(vmx|svm)' /proc/cpuinfo)
     if [ $val -gt 0 ]; then
         apt install cpu-checker
         kvm-ok
         if [ $? -eq 0 ]; then
-            echo "${BLUE}All checks passed. Beginning KVM installation...${NC}"
+            echo -e "${BLUE}All checks passed. Beginning KVM installation...${NC}"
             apt update && \
             apt install qemu qemu-kvm libvirt-bin virt-manager
             apt install bridge-utils
             virsh list --all
             if [ $? -eq 0 ]; then
-                echo "${GREEN}KVM Installed!${NC}"
+                echo -e "${GREEN}KVM Installed!${NC}"
             else
-                echo "${RED}Could not install KVM!${NC}"
+                echo -e "${RED}Could not install KVM!${NC}"
                 exit 1
             fi
         else
-            echo "${RED}KVM acceleration cannot be used. Please try using virtualbox.${NC}"
+            echo -e "${RED}KVM acceleration cannot be used. Please try using virtualbox.${NC}"
             exit 1
         fi
     else
-        echo "${RED}Virtualisation disabled. Please enable VT technology in BIOS.${NC}"
+        echo -e "${RED}Virtualisation disabled. Please enable VT technology in BIOS.${NC}"
         exit 1
     fi
 fi
 
 
-echo "${RED}Installing KVM2 driver for minkube...${NC}"
+echo -e "${RED}Installing KVM2 driver for minkube...${NC}"
 apt install libvirt-clients libvirt-daemon-system && \
 usermod -a -G libvirt $(whoami) && \
 newgrp libvirt && \
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 && \
 install docker-machine-driver-kvm2 /usr/local/bin/ && \
 
-echo "${RED}Seting KVM as default hypervisor for minikube${NC}"
+echo -e "${RED}Seting KVM as default hypervisor for minikube${NC}"
 minikube config set vm-driver kvm2
+exit 0

@@ -17,13 +17,12 @@ VERSION = '1.0.0'
 
 def buildArgParser():
     parser = argparse.ArgumentParser(description='Cassandra On Kube ver ' + VERSION)
-    parser.add_argument('-h', '--hypervisor', help='Specify which hypervisor you want to use for virtualisation: kvm or virtualbox', default='virtualbox', choices=['virtualbox', 'kvm'])
+    parser.add_argument('--hypervisor', help='Specify which hypervisor you want to use for virtualisation: kvm or virtualbox', default='virtualbox', choices=['virtualbox', 'kvm'])
     return parser
 
 def run_command(command):
-    try:
-        subprocess.check_output(command, shell=True)
-    except subprocess.CalledProcessError as e:
+    p = subprocess.run(command, shell=True)
+    if p.returncode != 0:
         print(colored("Aborting...", "red"))
         sys.exit()
 
@@ -39,16 +38,16 @@ def main():
     run_command("./install_kubernetes.sh")
 
     # Install a hypervisor
-    if args.h == 'virtualbox':
+    if args.hypervisor == 'virtualbox':
         run_command("./install_virtualbox.sh")
-    elif args.h == 'kvm':
+    elif args.hypervisor == 'kvm':
         run_command("./install_kvm.sh")
 
     # Install minikube
     run_command("./install_minikube.sh")
 
     # Run minikube
-    run_command("./basic_setup.sh")
+    run_command("./base_setup.sh")
 
 
 if __name__ == '__main__':

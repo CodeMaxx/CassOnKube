@@ -8,6 +8,6 @@
 
 ### Tested on Ubuntu 18.04
 
-systemctl restart docker
+systemctl restart docker && \
 minikube start
 exit 0

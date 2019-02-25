@@ -15,22 +15,22 @@ NC='\033[0m'
 
 
 if [ -x "$(command -v vboxmanage)" ]; then
-    echo "${GREEN}Using VirtualBox $(vboxmanage --version)${NC}"
+    echo -e "${GREEN}Using VirtualBox $(vboxmanage --version)${NC}"
 else
     val=$(egrep -c '(vmx|svm)' /proc/cpuinfo)
     if [ $val -gt 0 ]; then
-        echo "${GREEN}Installing VirtualBox...${NC}"
+        echo -e "${GREEN}Installing VirtualBox...${NC}"
         add-apt-repository multiverse && \
         apt-get update && \
         apt install -y virtualbox
         if [ -x "$(command -v vboxmanage)" ]; then
-            echo "${GREEN}VirtualBox Installed!${NC}"
+            echo -e "${GREEN}VirtualBox Installed!${NC}"
         else
-            echo "${RED}Could not install VirtualBox!${NC}"
+            echo -e "${RED}Could not install VirtualBox!${NC}"
             exit 1
         fi
     else
-        echo "${RED}Virtualisation disabled. Please enable VT technology in BIOS.${NC}"
+        echo -e "${RED}Virtualisation disabled. Please enable VT technology in BIOS.${NC}"
         exit 1
     fi
 fi
