@@ -17,6 +17,7 @@ VERSION = '1.0.0'
 
 def buildArgParser():
     parser = argparse.ArgumentParser(description='Cassandra On Kube ver ' + VERSION)
+    parser.add_argument('-h', '--hypervisor', help='Specify which hypervisor you want to use for virtualisation: kvm or virtualbox', default='virtualbox', choices=['virtualbox', 'kvm'])
     return parser
 
 def run_command(command):
@@ -29,6 +30,7 @@ def run_command(command):
 def main():
     # Reading arguments
     parser = buildArgParser()
+    args = parser.parse_args()
 
     # Install Docker
     run_command("./install_docker.sh")
@@ -37,7 +39,10 @@ def main():
     run_command("./install_kubernetes.sh")
 
     # Install a hypervisor
-    run_command("./install_hypervisor.sh")
+    if args.h == 'virtualbox':
+        run_command("./install_virtualbox.sh")
+    elif args.h == 'kvm':
+        run_command("./install_kvm.sh")
 
     # Install minikube
     run_command("./install_minikube.sh")
