@@ -10,3 +10,4 @@
 
 systemctl restart docker
 minikube start
+exit 0

@@ -18,7 +18,7 @@ virsh list --all
 if [ $? -eq 0 ]; then
     echo "KVM already installed!"
 else
-    echo "${GREEN}Installing Docker...${NC}"
+    echo "${GREEN}Installing KVM...${NC}"
     echo "${BLUE}Pre-installation checks in progress...${NC}"
     val=$(egrep -c '(vmx|svm)' /proc/cpuinfo)
     if [ $val -gt 0 ]; then
@@ -29,6 +29,13 @@ else
             apt update && \
             apt install qemu qemu-kvm libvirt-bin virt-manager
             apt install bridge-utils
+            virsh list --all
+            if [ $? -eq 0 ]; then
+                echo "${GREEN}KVM Installed!${NC}"
+            else
+                echo "${RED}Could not install KVM!${NC}"
+                exit 1
+            fi
         else
             echo "${RED}KVM acceleration cannot be used. Please try using virtualbox.${NC}"
             exit 1
@@ -39,12 +46,13 @@ else
     fi
 fi
 
-# KVM2 Driver installation for minkube
+
+echo "${RED}Installing KVM2 driver for minkube...${NC}"
 apt install libvirt-clients libvirt-daemon-system && \
 usermod -a -G libvirt $(whoami) && \
 newgrp libvirt && \
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 && \
 install docker-machine-driver-kvm2 /usr/local/bin/ && \
 
-# Set KVM as default driver for minikube
+echo "${RED}Seting KVM as default hypervisor for minikube${NC}"
 minikube config set vm-driver kvm2

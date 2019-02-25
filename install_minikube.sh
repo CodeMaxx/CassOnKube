@@ -8,7 +8,24 @@
 
 ### Tested on Ubuntu 18.04
 
-mkdir /tmp/cassonkube/ && cd /tmp/cassonkube && \
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && \
-chmod +x minikube && \
-cp minikube /usr/local/bin && rm minikube
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+
+if [ -x "$(command -v minikube)" ]; then
+    echo "${GREEN}Using $(minikube version){NC}"
+else
+    echo "${GREEN}Installing Minikube...${NC}"
+    mkdir /tmp/cassonkube/ && cd /tmp/cassonkube && \
+    curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && \
+    chmod +x minikube && \
+    cp minikube /usr/local/bin && rm minikube
+    if [ -x "$(command -v minikube)" ]; then
+        echo "${GREEN}Minikube Installed!${NC}"
+    else
+        echo "${RED}Could not install Minikube!${NC}"
+        exit 1
+    fi
+fi
